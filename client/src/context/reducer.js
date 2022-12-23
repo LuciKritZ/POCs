@@ -1,8 +1,6 @@
+import { setCurrentUser } from '../helpers/local-storage.helper';
 import ACTIONS from './actions';
-import {
-  LOCAL_STORAGE_VARIABLES,
-  NO_MATCHED_ACTION,
-} from './constants.context';
+import { NO_MATCHED_ACTION } from './constants.context';
 
 const reducer = (state, action) => {
   switch (action.type) {
@@ -22,10 +20,7 @@ const reducer = (state, action) => {
       return { ...state, alert: action.payload };
 
     case ACTIONS.UPDATE_USER:
-      localStorage.setItem(
-        LOCAL_STORAGE_VARIABLES.CURRENT_USER,
-        JSON.stringify(action.payload)
-      );
+      setCurrentUser(action.payload);
       return { ...state, currentUser: action.payload };
 
     default:
