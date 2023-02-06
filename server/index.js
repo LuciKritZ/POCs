@@ -1,6 +1,9 @@
 import express from 'express';
 import dotenv from 'dotenv';
 import roomRouter from './routes/rooms.router.js';
+import mongoose from 'mongoose';
+import appErrorHandler from './utils/app-error.util.js';
+import userRouter from './routes/users.router.js';
 
 dotenv.config();
 
@@ -22,6 +25,7 @@ app.use((req, res, next) => {
 
 app.use(express.json({ limit: '10mb' }));
 app.use('/room', roomRouter);
+app.use('/user', userRouter);
 
 app.use('/', (req, res) =>
   res.json({
@@ -39,6 +43,7 @@ app.use((req, res) =>
 const startServer = async () => {
   try {
     // Connection to MongoDB
+    mongoose.connect(process.env.MONGO_CONNECT);
     app.listen(port, () =>
       console.log(`Server is listening to port: ${port}.`)
     );

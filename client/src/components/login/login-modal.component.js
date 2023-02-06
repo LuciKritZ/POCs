@@ -15,6 +15,7 @@ import If from '../if/if.component';
 import Password from '../form/password.component';
 import OneTapLogin from '../one-tap-login/one-tap-login.component';
 import ACTIONS from '../../context/actions';
+import { login, register } from '../../services/user.services';
 
 const LoginModal = () => {
   const {
@@ -35,29 +36,40 @@ const LoginModal = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    // Testing Loader
-    dispatch({
-      type: ACTIONS.START_LOADER,
-    });
-    setTimeout(() => {
-      dispatch({
-        type: ACTIONS.END_LOADER,
-      });
-    }, 6000);
+    const email = emailRef.current.value;
+    const password = passwordRef.current.value;
 
-    // Testing Notifications
-    const password = passwordRef.current?.value;
-    const confirmPassword = confirmPasswordRef.current?.value;
+    if (!isRegister) {
+      return login(
+        {
+          email,
+          password,
+        },
+        dispatch
+      );
+    }
+
+    const name = nameRef.current.value;
+    const confirmPassword = confirmPasswordRef.current.value;
+
     if (password !== confirmPassword) {
-      dispatch({
+      return dispatch({
         type: ACTIONS.UPDATE_ALERT,
         payload: {
           open: true,
           severity: 'error',
-          message: 'Passwords do not match.',
+          message: 'Passwords do not match',
         },
       });
     }
+    register(
+      {
+        name,
+        email,
+        password,
+      },
+      dispatch
+    );
   };
 
   const handleRegister = () =>
